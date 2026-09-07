@@ -78,16 +78,17 @@ Here, higher values are better because each token represents more content.
 
 Look at the difference here: 
 
-| Tokenizer         | Lang | Char per Token(Real) | Token per Char (Misleading) |
-|-------------------|------|----------------|----------------|
-| gpt2              | eng  | 5.044          | 0.1983         |
-| gpt2              | hin  | 0.763          | 1.3104         |
-| gpt2              | mal  | 0.416          | 2.4015         |
-| gpt2              | tam  | 0.418          | 2.3917         |
-| xlm-roberta-base  | eng  | 4.645          | 0.2153         |
-| xlm-roberta-base  | hin  | 3.647          | 0.2742         |
-| xlm-roberta-base  | mal  | 3.635          | 0.2751         |
-| xlm-roberta-base  | tam  | 4.080          | 0.2451         |
+| Tokenizer | Language | Char / Token | Token / Char |
+|---|---|---:|---:|
+| GPT-2 | English | 5.221 | 0.1915 |
+| GPT-2 | Hindi | 0.765 | 1.3067 |
+| GPT-2 | Malayalam | 0.414 | 2.4171 |
+| GPT-2 | Tamil | 0.425 | 2.3556 |
+| XLM-RoBERTa | English | 4.646 | 0.2152 |
+| XLM-RoBERTa | Hindi | 3.858 | 0.2592 |
+| XLM-RoBERTa | Malayalam | 4.166 | 0.2400 |
+| XLM-RoBERTa | Tamil | 3.899 | 0.2565 |
+
 
 Therefore, calling `tokens/characters` "compression" can mislead readers into thinking that a lower value is worse, when the opposite is true.
 
@@ -143,14 +144,15 @@ Therefore, `tokens/grapheme` should not be called compression.
 
 ## 5. A2 Results
 
-| Tokenizer | Language | Fertility (Tok/Word) | Graphemes/Token |
-|---|---|---:|---:|
-| GPT-2 | English | 1.239 | 5.241 |
-| GPT-2 | Hindi | 7.561 | 0.526 |
-| GPT-2 | Malayalam | 23.627 | 0.244 |
-| GPT-2 | Tamil | 23.444 | 0.281 |
-| XLM-RoBERTa-base | English | 1.365 | 4.760 |
-| XLM-RoBERTa-base | Hindi | 1.520 | 2.618 |
-| XLM-RoBERTa-base | Malayalam | 2.511 | 2.293 |
-| XLM-RoBERTa-base | Tamil | 2.274 | 2.898 |
+| Tokenizer | Language | N Lines | Fertility (Tok / Word) | Compression (Grapheme / Tok) |
+|---|---|---:|---:|---:|
+| GPT-2 | English | 25 | 1.193 | 5.221 |
+| GPT-2 | Hindi | 25 | 7.311 | 0.549 |
+| GPT-2 | Malayalam | 25 | 24.732 | 0.241 |
+| GPT-2 | Tamil | 25 | 20.859 | 0.295 |
+| XLM-RoBERTa | English | 25 | 1.341 | 4.646 |
+| XLM-RoBERTa | Hindi | 25 | 1.450 | 2.770 |
+| XLM-RoBERTa | Malayalam | 25 | 2.456 | 2.432 |
+| XLM-RoBERTa | Tamil | 25 | 2.271 | 2.709 |
+
 

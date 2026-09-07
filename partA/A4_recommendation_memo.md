@@ -33,11 +33,11 @@ This suggests that the large cost difference is mainly caused by **poor Indic vo
 
 ## Routing Recommendation
 
-Do **not** use English-focused tokenizers such as GPT-2 for Indic-language traffic.
+We should **not** use English-focused tokenizers such as GPT-2 for Indic-language traffic.
 
 A multilingual tokenizer such as **xlm-roberta-base** keeps the overhead around **1.3 to 1.4x English**, which is manageable through normal capacity planning.
 
-**Main takeaway: choose the right tokenizer instead of creating separate infrastructure for each language.**
+**Main takeaway: We should choose the right tokenizer instead of creating separate infrastructure for each language.**
 
 ## Biggest Caveat
 
