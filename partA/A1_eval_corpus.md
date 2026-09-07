@@ -23,16 +23,16 @@ FLORES language-script mappings: `eng_Latn`, `hin_Deva`, `mal_Mlym`, `tam_Taml`.
 
 The intended sample contains:
 
-- **5 records × 3 sentences = 15 sentences per language**, however parameters like,<br>"NUMBER_OF_RECORDS", "LINES_PER_RECORD" can be changed to get more number of sentences.
+- **30 records × 3 sentences = 90 sentences per language**, however parameters like,<br>"NUMBER_OF_RECORDS", "LINES_PER_RECORD" can be changed to get more number of sentences.
 - Randomly selected from the **997-sentence FLORES-200 dev split**
-- Line Numbers used: `[781, 838, 854, 861, 928]`
+- Line Numbers used: `[26, 28, 31, 33, 90, 96, 105, 115, 143, 204, 224, 229, 239, 251, 282, 433, 518, 559, 575, 605, 617, 655, 666, 693, 719, 734, 755, 759, 760, 914]`
 - Each record contains 3 consecutive sentences
 
 ### Known Discrepancy
 
-The audit notebook reports **25 lines** in the saved text files. However, the files also contain record headers and divider lines.
+The audit notebook reports **150 lines** in the saved text files. However, the files also contain record headers and divider lines.
 
-Therefore, **15 is the actual number of FLORES sentences per language**. The 25-line count should not be treated as corpus size.
+Therefore, **90 is the actual number of FLORES sentences per language**. The 150-line count should not be treated as corpus size.
 
 ## Domain
 
@@ -54,7 +54,7 @@ No lowercasing, punctuation removal, or tokenization was performed at this stage
 
 ## Limitations
 
-This is a **small 25-sentence sample**, so it cannot represent typical language-wide tokenizer behavior. The results should be treated as directional evidence, not stable population statistics.
+This is a **small 90-sentence sample**, so it cannot represent typical language-wide tokenizer behavior. The results should be treated as directional evidence, not stable population statistics.
 
 The corpus is also limited to **four languages and one formal domain**. It does not represent other Indic languages, conversational text, social media, code-switching, or technical domains.
 

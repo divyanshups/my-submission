@@ -8,9 +8,10 @@
 
 **Key findings:**
 
-1. `.lower()` changes English tokenization; A2 showed Hindi also changed from 5 to 4 tokens.
+1. `.lower()` changes English tokenization; A2 showed Hindi also changed from 24 to 23 tokens.
 2. `line.split(" ")` can inflate word counts because repeated spaces create empty strings.
-3. `len(line)` counts code points, not grapheme clusters.
+3. `len(line)` counts Unicode code points, not grapheme clusters. 
+Grapheme clusters are generally closer to what a user perceives as a single character, especially in Indic scripts where a visible character can consist of multiple Unicode code points.
 4. Per-line mean gives short and long sentences equal weight.
 5. Word count is not a fair cross-language denominator because Indic words can contain more morphology.
 6. NFC was initially treated as a decoy but requires an isolation experiment before being considered proven.
@@ -23,9 +24,9 @@
 
 **Action:** Used FLORES-200 `dev` from `yash9439/flores200` because it is parallel, ungated, and parquet-backed. Languages: English, Hindi, Malayalam, and Tamil.
 
-**Result:** The evaluation corpus contains **15 sentence lines per language**, sampled using Line Numbers `[781, 838, 854, 861, 928]`. The source is formal, professionally translated FLORES content from Wikinews, Wikijunior, and Wikivoyage.
+**Result:** The evaluation corpus contains **90 sentence lines per language**, sampled using Line Numbers `[26, 28, 31, 33, 90, 96, 105, 115, 143, 204, 224, 229, 239, 251, 282, 433, 518, 559, 575, 605, 617, 655, 666, 693, 719, 734, 755, 759, 760, 914]`. The source is formal, professionally translated FLORES content from Wikinews, Wikijunior, and Wikivoyage.
 
-Preprocessing uses NFKC, BOM/ZWSP/NBSP removal, and whitespace normalization.
+Preprocessing uses NFKC, BOM removal, zero-width removals and whitespace normalization.
 
 **Limitation:** The corpus is small and formal, so results are directional and may not represent conversational, code-switched, legal, medical, or other domain-specific text.
 
@@ -48,16 +49,18 @@ The fertility notebook uses **15 sentence lines per language**. This keeps the p
 
 **Result:** GPT-2 fragments Malayalam and Tamil heavily, while XLM-R significantly reduces the gap.
 
-| Tokenizer | Language | Tok/Word | Tok/Grapheme | Tok/Byte | Tok/Parallel Sentence |
+
+| Tokenizer | Language | Tok / Word | Tok / Grapheme | Tok / Byte | Tok / Parallel Sentence |
 |---|---|---:|---:|---:|---:|
-| GPT-2 | English | 1.239 | 0.1908 | 0.1908 | 17.40 |
-| GPT-2 | Hindi | 7.561 | 1.9007 | 0.5681 | 124.00 |
-| GPT-2 | Malayalam | 23.627 | 4.1037 | 0.9522 | 253.28 |
-| GPT-2 | Tamil | 23.444 | 3.5574 | 0.9571 | 270.08 |
-| XLM-RoBERTa-base | English | 1.365 | 0.2101 | 0.2101 | 19.16 |
-| XLM-RoBERTa-base | Hindi | 1.520 | 0.3820 | 0.1142 | 24.92 |
-| XLM-RoBERTa-base | Malayalam | 2.511 | 0.4362 | 0.1012 | 26.92 |
-| XLM-RoBERTa-base | Tamil | 2.274 | 0.3451 | 0.0928 | 26.20 |
+| GPT-2 | English | 1.297 | 0.1981 | 0.1980 | 16.83 |
+| GPT-2 | Hindi | 7.251 | 1.8140 | 0.5608 | 110.85 |
+| GPT-2 | Malayalam | 23.757 | 3.9194 | 0.9441 | 219.51 |
+| GPT-2 | Tamil | 22.108 | 3.4001 | 0.9477 | 232.73 |
+| XLM-RoBERTa-base | English | 1.445 | 0.2207 | 0.2207 | 18.76 |
+| XLM-RoBERTa-base | Hindi | 1.496 | 0.3742 | 0.1157 | 22.87 |
+| XLM-RoBERTa-base | Malayalam | 2.647 | 0.4367 | 0.1052 | 24.46 |
+| XLM-RoBERTa-base | Tamil | 2.412 | 0.3709 | 0.1034 | 25.39 |
+
 
 ### Denominator Revision
 
@@ -69,23 +72,25 @@ The fertility notebook uses **15 sentence lines per language**. This keeps the p
 
 This requires genuine sentence alignment, not just equal line counts.
 
+
 ### Main Conclusion
 
 GPT-2 has very poor token efficiency for the Indic languages in this corpus:
 
-- Hindi: **7.13x** English
-- Malayalam: **14.56x** English
-- Tamil: **15.52x** English
+- Hindi: **6.59x** English
+- Malayalam: **13.05x** English
+- Tamil: **13.83x** English
 
 XLM-R reduces the gap to:
 
-- Hindi: **1.30x**
-- Malayalam: **1.40x**
-- Tamil: **1.37x**
+- Hindi: **1.22x**
+- Malayalam: **1.30x**
+- Tamil: **1.35x**
 
 Therefore, an Indic-aware multilingual tokenizer is preferable to an English-centric tokenizer for multilingual workloads.
 
-The **1.3x to 1.4x** range should be treated as an initial directional estimate, not a fixed production constant.
+The **1.2x to 1.4x** range should be treated as an initial directional estimate, not a fixed production constant.
+
 
 ## Session 5: Capacity Reconciliation
 

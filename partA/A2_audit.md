@@ -2,15 +2,17 @@
 
 ## 1. Purpose
 
-The audit checks whether the fertility analysis correctly measures tokenizer efficiency across English, Hindi, Malayalam, and Tamil using GPT-2 and XLM-RoBERTa.
+The audit checks the potential flaws in the codebase `fertility.py`.
+
+Thereafter, the code has been corrected to measure tokenizers efficiency across English, Hindi, Malayalam, and Tamil using GPT-2 and XLM-RoBERTa.
 
 The main A2 issues checked were:
 
+-Incorrect interpretation of compression
 - Lowercasing effects
 - Word splitting errors
 - Code point vs grapheme counting
 - Mean-of-ratios vs pooled calculation
-- Incorrect interpretation of compression
 
 ## 2. Key Findings
 
@@ -20,8 +22,8 @@ The A2 isolation test showed:
 
 | Language | Original tokens | Lowercased tokens |
 |---|---:|---:|
-| English | 5 | 4 |
-| Hindi | 5 | 4 |
+| English | 24 | 23 |
+| Hindi | 136 | 136 |
 
 The notebook comment expected no change for Hindi, but the actual output shows a change from 5 to 4 tokens.
 
@@ -46,10 +48,10 @@ For English:
 
 | Method | Fertility |
 |---|---:|
-| Mean of sentence-level ratios | 1.5804 |
-| Pooled calculation | 1.2393 |
+| Mean of sentence-level ratios | 1.5939 |
+| Pooled calculation | 1.2599 |
 
-Relative difference: **27.5%**
+Relative difference: **26.5%**
 
 This confirms that averaging sentence-level fertility ratios can produce a substantially different result from calculating fertility using pooled totals.
 
@@ -78,21 +80,23 @@ Here, higher values are better because each token represents more content.
 
 Look at the difference here: 
 
-| Tokenizer | Language | Char / Token | Token / Char |
-|---|---|---:|---:|
-| GPT-2 | English | 5.221 | 0.1915 |
-| GPT-2 | Hindi | 0.765 | 1.3067 |
-| GPT-2 | Malayalam | 0.414 | 2.4171 |
-| GPT-2 | Tamil | 0.425 | 2.3556 |
-| XLM-RoBERTa | English | 4.646 | 0.2152 |
-| XLM-RoBERTa | Hindi | 3.858 | 0.2592 |
-| XLM-RoBERTa | Malayalam | 4.166 | 0.2400 |
-| XLM-RoBERTa | Tamil | 3.899 | 0.2565 |
+
+| tokenizer          | lang | char_per_token | token_per_char |
+|--------------------|------|----------------|----------------|
+| gpt2               | eng  | 5.049          | 0.1981         |
+| gpt2               | hin  | 0.771          | 1.2975         |
+| gpt2               | mal  | 0.425          | 2.3543         |
+| gpt2               | tam  | 0.424          | 2.3606         |
+| xlm-roberta-base   | eng  | 4.530          | 0.2207         |
+| xlm-roberta-base   | hin  | 3.736          | 0.2677         |
+| xlm-roberta-base   | mal  | 3.812          | 0.2623         |
+| xlm-roberta-base   | tam  | 3.883          | 0.2575         |
+
 
 
 Therefore, calling `tokens/characters` "compression" can mislead readers into thinking that a lower value is worse, when the opposite is true.
 
-## 3. Likely Decoys
+## 3. Suspicious Flaws
 
 ### `random.seed(1337)` and unused `random`
 
@@ -144,15 +148,17 @@ Therefore, `tokens/grapheme` should not be called compression.
 
 ## 5. A2 Results
 
-| Tokenizer | Language | N Lines | Fertility (Tok / Word) | Compression (Grapheme / Tok) |
-|---|---|---:|---:|---:|
-| GPT-2 | English | 25 | 1.193 | 5.221 |
-| GPT-2 | Hindi | 25 | 7.311 | 0.549 |
-| GPT-2 | Malayalam | 25 | 24.732 | 0.241 |
-| GPT-2 | Tamil | 25 | 20.859 | 0.295 |
-| XLM-RoBERTa | English | 25 | 1.341 | 4.646 |
-| XLM-RoBERTa | Hindi | 25 | 1.450 | 2.770 |
-| XLM-RoBERTa | Malayalam | 25 | 2.456 | 2.432 |
-| XLM-RoBERTa | Tamil | 25 | 2.271 | 2.709 |
+
+| tokenizer        | lang | n_lines | fertility_tok_per_word | compression_grapheme_per_tok |
+|------------------|------|---------|-------------------------|------------------------------|
+| gpt2             | eng  | 150     | 1.297                   | 5.049                        |
+| gpt2             | hin  | 150     | 7.251                   | 0.551                        |
+| gpt2             | mal  | 150     | 23.757                  | 0.255                        |
+| gpt2             | tam  | 150     | 22.108                  | 0.294                        |
+| xlm-roberta-base | eng  | 150     | 1.445                   | 4.530                        |
+| xlm-roberta-base | hin  | 150     | 1.496                   | 2.672                        |
+| xlm-roberta-base | mal  | 150     | 2.647                   | 2.290                        |
+| xlm-roberta-base | tam  | 150     | 2.412                   | 2.696                        |
+
 
 
