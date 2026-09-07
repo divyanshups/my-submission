@@ -25,9 +25,9 @@ The A2 isolation test showed:
 | English | 24 | 23 |
 | Hindi | 136 | 136 |
 
-The notebook comment expected no change for Hindi, but the actual output shows a change from 5 to 4 tokens.
+Therefore, it showed no change in the number of tokens for Hindi, with both the original and lowercased text producing 136 tokens.
 
-Therefore, this should be treated as an observed behavior, not evidence that lowercasing has no effect on Hindi.
+Therefore, the evidence indicates that lowercasing had no effect on Hindi token count in this test, while English showed a reduction from 24 to 23 tokens.
 
 ### Fix 2: Word Splitting
 
