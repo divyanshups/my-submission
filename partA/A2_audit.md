@@ -96,6 +96,28 @@ Look at the difference here:
 
 Therefore, calling `tokens/characters` "compression" can mislead readers into thinking that a lower value is worse, when the opposite is true.
 
+### Fix 5: Unicode Code Points vs Grapheme Clusters
+
+This was an important finding in the tokenizer benchmarking, particularly for Indic scripts.
+
+Using `len(line)` counts Unicode code points, not grapheme clusters. Grapheme clusters are generally closer to what a user perceives as a single character, especially in Indic scripts where a visible character can consist of multiple Unicode code points.
+
+The observed differences were:
+
+| Language | `len()` | `grapheme.length()` |
+|---|---:|---:|
+| English | 94 | 94 |
+| Hindi | 86 | 61 |
+| Malayalam | 125 | 74 |
+| Tamil | 102 | 64 |
+
+For English, both methods produce the same count. However, the difference is substantial for the Indic languages, with grapheme-cluster counts being considerably lower than Unicode code-point counts.
+
+This confirms that using `len(line)` can overcount the number of user-perceived characters in multilingual text, particularly for scripts with combining marks and complex character sequences.
+
+The corrected implementation therefore uses grapheme-cluster length rather than `len(line)` when character counts are intended to represent user-perceived characters.
+
+
 ## 3. Suspicious Flaws
 
 ### `random.seed(1337)` and unused `random`
@@ -159,6 +181,3 @@ Therefore, `tokens/grapheme` should not be called compression.
 | xlm-roberta-base | hin  | 150     | 1.496                   | 2.672                        |
 | xlm-roberta-base | mal  | 150     | 2.647                   | 2.290                        |
 | xlm-roberta-base | tam  | 150     | 2.412                   | 2.696                        |
-
-
-

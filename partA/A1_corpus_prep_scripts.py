@@ -24,6 +24,7 @@ LANGUAGE_CONFIGS = {
 }
 
 #Pipeline configuration defaults
+random.seed(42)
 NUMBER_OF_RECORDS = 5  # Total number of records (samples) to generate
 LINES_PER_RECORD = 3  # Number of lines in each record
 
